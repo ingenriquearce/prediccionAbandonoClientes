@@ -1,6 +1,8 @@
 import streamlit as st
+import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
@@ -201,7 +203,6 @@ def preprocesamiento():
     return X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test
 
 def seleccionModelo():
-    preprocesamiento()
     X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test = preprocesamiento()
 
     # Entrenar los dos modelos
@@ -233,7 +234,6 @@ def seleccionModelo():
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 def entrenamientoRegresion(cant_top_clientes):
-    preprocesamiento()
     X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test = preprocesamiento()
     st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -259,6 +259,23 @@ def entrenamientoRegresion(cant_top_clientes):
     # Ordenar el DataFrame por las probabilidades en orden descendente
     clientes_probables_abandono = clientes_probables_abandono.sort_values(by='Probabilidad_Abandono_LR', ascending=False)
 
+    # Calcular métricas de evaluación
+    accuracy_logistic = accuracy_score(y_test, y_pred)
+    classification_rep = classification_report(y_test, y_pred)
+    confusion_mat = confusion_matrix(y_test, y_pred)
+
+    # Mostrar las métricas en la interfaz
+    st.subheader("Reporte de Clasificación:")
+    st.text(classification_rep)
+
+    # Graficar Matriz de Confusión
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(confusion_mat, annot=True, fmt='d', cmap='Blues', cbar=False)
+    plt.xlabel('Etiquetas Predichas')
+    plt.ylabel('Etiquetas Reales')
+    plt.title('Matriz de Confusión')
+    st.pyplot(plt)
+
     # Validar que la cantidad ingresada sea válida
     if cant_top_clientes <= 0:
         st.warning("La cantidad ingresada debe ser un número positivo.")
@@ -278,7 +295,6 @@ def entrenamientoRegresion(cant_top_clientes):
         st.pyplot(plt)
         
 def entrenamientoArboles(cant_top_clientes):
-    preprocesamiento()
     X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test = preprocesamiento()
     
     # Crear y entrenar el modelo seleccionado (Bosques Aleatorios)
@@ -303,6 +319,23 @@ def entrenamientoArboles(cant_top_clientes):
     # Ordenar el DataFrame por las probabilidades en orden descendente
     clientes_probables_abandono_rf = clientes_probables_abandono_rf.sort_values(by='Probabilidad_Abandono_RF', ascending=False)
 
+    # Calcular métricas de evaluación
+    accuracy_rf = accuracy_score(y_test, y_pred)
+    classification_rep = classification_report(y_test, y_pred)
+    confusion_mat = confusion_matrix(y_test, y_pred)
+
+    # Mostrar las métricas en la interfaz
+    st.subheader("Reporte de Clasificación:")
+    st.text(classification_rep)
+
+    # Graficar Matriz de Confusión
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(confusion_mat, annot=True, fmt='d', cmap='Blues', cbar=False)
+    plt.xlabel('Etiquetas Predichas')
+    plt.ylabel('Etiquetas Reales')
+    plt.title('Matriz de Confusión')
+    st.pyplot(plt)
+
     # Validar que la cantidad ingresada sea válida
     if cant_top_clientes <= 0:
         st.warning("La cantidad ingresada debe ser un número positivo.")
@@ -322,7 +355,6 @@ def entrenamientoArboles(cant_top_clientes):
         st.pyplot(plt)
 
 def entrenamientoSVM(cant_top_clientes):
-    preprocesamiento()
     X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test = preprocesamiento()
 
     # Crear y entrenar el modelo SVM
@@ -347,6 +379,23 @@ def entrenamientoSVM(cant_top_clientes):
     # Ordenar el DataFrame por las probabilidades en orden descendente
     clientes_probables_abandono_svm = clientes_probables_abandono_svm.sort_values(by='Probabilidad_Abandono_SVM', ascending=False)
 
+    # Calcular métricas de evaluación
+    accuracy_svm = accuracy_score(y_test, y_pred)
+    classification_rep = classification_report(y_test, y_pred)
+    confusion_mat = confusion_matrix(y_test, y_pred)
+
+    # Mostrar las métricas en la interfaz
+    st.subheader("Reporte de Clasificación:")
+    st.text(classification_rep)
+
+    # Graficar Matriz de Confusión
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(confusion_mat, annot=True, fmt='d', cmap='Blues', cbar=False)
+    plt.xlabel('Etiquetas Predichas')
+    plt.ylabel('Etiquetas Reales')
+    plt.title('Matriz de Confusión')
+    st.pyplot(plt)
+
     # Validar la cantidad ingresada
     if cant_top_clientes <= 0:
         st.warning("La cantidad ingresada debe ser un número positivo.")
@@ -366,7 +415,6 @@ def entrenamientoSVM(cant_top_clientes):
         st.pyplot(plt)
 
 def entrenamientoGradientBoosting(cant_top_clientes):
-    preprocesamiento()
     X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test = preprocesamiento()
 
     # Crear y entrenar el modelo de Gradient Boosting
@@ -391,6 +439,23 @@ def entrenamientoGradientBoosting(cant_top_clientes):
     # Ordenar el DataFrame por las probabilidades en orden descendente
     clientes_probables_abandono_gb = clientes_probables_abandono_gb.sort_values(by='Probabilidad_Abandono_GB', ascending=False)
 
+    # Calcular métricas de evaluación
+    accuracy_gb = accuracy_score(y_test, y_pred)
+    classification_rep = classification_report(y_test, y_pred)
+    confusion_mat = confusion_matrix(y_test, y_pred)
+
+    # Mostrar las métricas en la interfaz
+    st.subheader("Reporte de Clasificación:")
+    st.text(classification_rep)
+
+    # Graficar Matriz de Confusión
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(confusion_mat, annot=True, fmt='d', cmap='Blues', cbar=False)
+    plt.xlabel('Etiquetas Predichas')
+    plt.ylabel('Etiquetas Reales')
+    plt.title('Matriz de Confusión')
+    st.pyplot(plt)
+
     # Validar la cantidad ingresada
     if cant_top_clientes <= 0:
         st.warning("La cantidad ingresada debe ser un número positivo.")
@@ -398,9 +463,11 @@ def entrenamientoGradientBoosting(cant_top_clientes):
         # Tomar solo la cantidad especificada de clientes
         top_clientes_gb = clientes_probables_abandono_gb.head(cant_top_clientes)
 
-        # Crear una gráfica de barras para visualizar las probabilidades de abandono de los clientes seleccionados con el modelo Gradient Boosting
+        # Crear una gráfica de barras para visualizar las probabilidades de abandono de los 
+        # clientes seleccionados con el modelo Gradient Boosting
         plt.figure(figsize=(20, 8))
-        plt.bar(top_clientes_gb['Apellido'] + ' - ' + top_clientes_gb['ClienteId'].astype(str), top_clientes_gb['Probabilidad_Abandono_GB'], color='lightcoral')
+        plt.bar(top_clientes_gb['Apellido'] + ' - ' + top_clientes_gb['ClienteId'].astype(str), 
+                top_clientes_gb['Probabilidad_Abandono_GB'], color='lightcoral')
         plt.xlabel('Apellidos de los Clientes')
         plt.ylabel('Probabilidad de Abandono (GB)')
         plt.title(f'Top {cant_top_clientes} Clientes con Mayor Probabilidad de Abandono (GB)')
@@ -442,6 +509,8 @@ def main():
         entrenamientoSVM(cant_top_clientes)
     if st.button('GradientBoosting'):
         entrenamientoGradientBoosting(cant_top_clientes)
+
+       
     # Interfaz de búsqueda por ID
     st.subheader('Búsqueda de Cliente por ID')
     cliente_id = st.text_input("Introduce el ID del Cliente")
