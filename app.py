@@ -12,6 +12,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import cross_val_score
 
 data = None
 
@@ -276,6 +277,12 @@ def entrenamientoRegresion(cant_top_clientes):
     plt.title('Matriz de Confusión')
     st.pyplot(plt)
 
+    # Realizar validación cruzada
+    cv_scores = cross_val_score(logistic_model, X_train_preprocessed, y_train, cv=5)  # cv=5 para 5 pliegues
+
+    # Mostrar los resultados
+    st.write(f'Precisión promedio en validación cruzada: {cv_scores.mean():.2f}')
+
     # Validar que la cantidad ingresada sea válida
     if cant_top_clientes <= 0:
         st.warning("La cantidad ingresada debe ser un número positivo.")
@@ -335,6 +342,12 @@ def entrenamientoArboles(cant_top_clientes):
     plt.ylabel('Etiquetas Reales')
     plt.title('Matriz de Confusión')
     st.pyplot(plt)
+    
+    # Realizar validación cruzada
+    cv_scores = cross_val_score(rf_model, X_train_preprocessed, y_train, cv=5)  # cv=5 para 5 pliegues
+
+    # Mostrar los resultados
+    st.write(f'Precisión promedio en validación cruzada: {cv_scores.mean():.2f}')
 
     # Validar que la cantidad ingresada sea válida
     if cant_top_clientes <= 0:
@@ -396,6 +409,12 @@ def entrenamientoSVM(cant_top_clientes):
     plt.title('Matriz de Confusión')
     st.pyplot(plt)
 
+    # Realizar validación cruzada
+    cv_scores = cross_val_score(svm_model, X_train_preprocessed, y_train, cv=5)  # cv=5 para 5 pliegues
+
+    # Mostrar los resultados
+    st.write(f'Precisión promedio en validación cruzada: {cv_scores.mean():.2f}')
+
     # Validar la cantidad ingresada
     if cant_top_clientes <= 0:
         st.warning("La cantidad ingresada debe ser un número positivo.")
@@ -455,6 +474,12 @@ def entrenamientoGradientBoosting(cant_top_clientes):
     plt.ylabel('Etiquetas Reales')
     plt.title('Matriz de Confusión')
     st.pyplot(plt)
+
+    # Realizar validación cruzada
+    cv_scores = cross_val_score(gb_model, X_train_preprocessed, y_train, cv=5)  # cv=5 para 5 pliegues
+
+    # Mostrar los resultados
+    st.write(f'Precisión promedio en validación cruzada: {cv_scores.mean():.2f}')
 
     # Validar la cantidad ingresada
     if cant_top_clientes <= 0:
