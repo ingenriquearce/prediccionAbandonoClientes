@@ -84,7 +84,8 @@ def analisisExploratorio():
     st.header("Análisis Exploratorio de Datos")
     
     # Definir columnas numéricas
-    numeric_features = ['PuntuacionCredito', 'Edad', 'Tenencia', 'Saldo', 'NroProductos', 'TieneTarjetaCredito', 'EsMiembroActivo', 'SalarioEstimado']
+    numeric_features = ['PuntuacionCredito', 'Edad', 'Tenencia', 'Saldo', 'NroProductos',
+                         'TieneTarjetaCredito', 'EsMiembroActivo', 'SalarioEstimado']
 
     # Mostrar tipos de datos y variables categóricas
     st.subheader("Tipos de Datos:")
@@ -200,6 +201,7 @@ def preprocesamiento():
     return X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test
 
 def seleccionModelo():
+    preprocesamiento()
     X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test = preprocesamiento()
 
     # Entrenar los dos modelos
@@ -431,7 +433,6 @@ def main():
         seleccionModelo()
 
     cant_top_clientes = st.slider("Inserta la cantidad top de clientes que deseas ver: ")
-    
     st.write("Elige el modelo de entrenamiento que que deseas utilizar: ")
     if st.button('Regresión Logística'):
         entrenamientoRegresion(cant_top_clientes)
