@@ -36,7 +36,6 @@ def cargar_datos():
                 return data # Retorna el dataframe
             else:
                 st.warning('El conjunto de datos no cumple con los requisitos del software')
-                st.warning('Carga Incorrecta')
                 return None
         except Exception as e:
             st.error(f"Error al cargar el archivo: {e}")
@@ -507,7 +506,7 @@ def buscar_cliente(cliente_id):
 def main():
     # Mostrar un análisis exploratorio de datos con datos limpios
     if st.button('Mostrar Análisis Exploratorio de Datos'):
-        if data != None:
+        if data is not None:
             limpieza()
             plt.clf()
             analisisExploratorio()
@@ -517,25 +516,41 @@ def main():
     # Mostrar una sugerencia de que modelo seleccionar
     st.write("Sugerencia de que modelo utilizar según su precisión")
     if st.button('Mostrar Sugerencia'):
-        seleccionModelo()
-
+        if data is not None:
+            seleccionModelo()
+        else:
+            st.warning('Carga de Datos Incorrecta')
     cant_top_clientes = st.slider("Inserta la cantidad top de clientes que deseas ver: ")
     st.write("Elige el modelo de entrenamiento que que deseas utilizar: ")
     if st.button('Regresión Logística'):
-        entrenamientoRegresion(cant_top_clientes)
+        if data is not None:
+            entrenamientoRegresion(cant_top_clientes)
+        else:
+            st.warning('Carga de Datos Incorrecta')    
     if st.button('Arboles de Decision'):
-        entrenamientoArboles(cant_top_clientes)
+        if data is not None:
+            entrenamientoArboles(cant_top_clientes)
+        else:
+            st.warning('Carga de Datos Incorrecta')    
     if st.button('SVM'):
-        entrenamientoSVM(cant_top_clientes)
+        if data is not None:
+            entrenamientoSVM(cant_top_clientes)
+        else:
+            st.warning('Carga de Datos Incorrecta')
     if st.button('GradientBoosting'):
-        entrenamientoGradientBoosting(cant_top_clientes)
+        if data is not None:
+            entrenamientoGradientBoosting(cant_top_clientes)
+        else:
+            st.warning('Carga de Datos Incorrecta')
 
-       
     # Interfaz de búsqueda por ID
     st.subheader('Búsqueda de Cliente por ID')
     cliente_id = st.text_input("Introduce el ID del Cliente")
     if st.button("Buscar"):
-        buscar_cliente(int(cliente_id))
+        if data is not None:
+            buscar_cliente(int(cliente_id))
+        else:
+            st.warning('Carga de Datos Incorrecta')
 
 if __name__ == '__main__':
     main()
