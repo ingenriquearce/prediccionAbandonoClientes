@@ -2,7 +2,6 @@ import streamlit as st
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
-import plotly.graph_objects as go
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
@@ -27,25 +26,18 @@ def cargar_datos():
     if uploaded_file is not None:
         try:
             data = pd.read_csv(uploaded_file)
-            # Renombrar las columnas
-            nuevos_nombres = {
-                'RowNumber': 'NroFila',
-                'CustomerId': 'ClienteId',
-                'Surname': 'Apellido',
-                'CreditScore': 'PuntuacionCredito',
-                'Geography': 'Geografia',
-                'Gender': 'Genero',
-                'Age': 'Edad',
-                'Tenure': 'Tenencia',
-                'Balance': 'Saldo',
-                'NumOfProducts': 'NroProductos',
-                'HasCrCard': 'TieneTarjetaCredito',
-                'IsActiveMember': 'EsMiembroActivo',
-                'EstimatedSalary': 'SalarioEstimado',
-                'Exited': 'Churn'
-            }
-            data = data.rename(columns=nuevos_nombres)
-            return data # Retorna el dataframe
+            # Asignar nombres arbitrarios
+            nombres_arbitrarios = ['NroFila', 'ClienteId', 'Apellido', 'PuntuacionCredito', 'Geografia', 
+                                   'Genero', 'Edad', 'Tenencia', 'Saldo', 'NroProductos', 
+                                   'TieneTarjetaCredito', 'EsMiembroActivo', 'SalarioEstimado', 'Churn']
+            # Verificar si la cantidad de nombres arbitrarios coincide con la cantidad de columnas en el DataFrame
+            if len(nombres_arbitrarios) == len(data.columns):
+                data.columns = nombres_arbitrarios
+                return data # Retorna el dataframe
+            else:
+                st.warning('El conjunto de datos no cumple con los requisitos del software')
+                st.warning('Carga Incorrecta')
+                return None
         except Exception as e:
             st.error(f"Error al cargar el archivo: {e}")
     return None
@@ -515,9 +507,12 @@ def buscar_cliente(cliente_id):
 def main():
     # Mostrar un análisis exploratorio de datos con datos limpios
     if st.button('Mostrar Análisis Exploratorio de Datos'):
-        limpieza()
-        plt.clf()
-        analisisExploratorio()
+        if data != None:
+            limpieza()
+            plt.clf()
+            analisisExploratorio()
+        else:
+            st.warning('Carga de Datos Incorrecta')
 
     # Mostrar una sugerencia de que modelo seleccionar
     st.write("Sugerencia de que modelo utilizar según su precisión")
