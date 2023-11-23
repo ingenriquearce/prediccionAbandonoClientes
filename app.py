@@ -2,6 +2,7 @@ import streamlit as st
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
+import io
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
@@ -220,9 +221,13 @@ def seleccionModelo():
     accuracy_scores = [accuracy_logistic, accuracy_rf, accuracy_svm, accuracy_gb]
     models = ['Regresión Logística', 'Bosques Aleatorios', 'SVM', 'GradientBoost']
 
-    # Crear una gráfica de barras en Streamlit
+    # Crear un DataFrame para facilitar la manipulación y visualización
+    df = pd.DataFrame({'Modelo': models, 'Precisión': accuracy_scores})
+    
+    # Crear una gráfica de barras horizontal en Streamlit
     st.title('Precisión de Modelos')
-    st.bar_chart(dict(zip(models, accuracy_scores)))
+    st.bar_chart(df.set_index('Modelo'))
+
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 def entrenamientoRegresion(cant_top_clientes):
@@ -281,13 +286,12 @@ def entrenamientoRegresion(cant_top_clientes):
         # Tomar solo la cantidad especificada de clientes
         top_clientes_lr = clientes_probables_abandono.head(cant_top_clientes)
 
-        # Crear una gráfica de barras para visualizar las probabilidades de abandono de los clientes seleccionados con el modelo LR
-        plt.figure(figsize=(20, 8))
-        plt.bar(top_clientes_lr['Apellido'] + ' - ' + top_clientes_lr['ClienteId'].astype(str), top_clientes_lr['Probabilidad_Abandono_LR'], color='lightcoral')
-        plt.xlabel('Apellidos de los Clientes')
-        plt.ylabel('Probabilidad de Abandono (LR)')
+        # Crear una gráfica de barras horizontales para visualizar las probabilidades de abandono de los clientes seleccionados con el modelo LR
+        plt.figure(figsize=(10, 6))
+        plt.barh(top_clientes_lr['Apellido'] + ' - ' + top_clientes_lr['ClienteId'].astype(str), top_clientes_lr['Probabilidad_Abandono_LR'], color='lightcoral')
+        plt.xlabel('Probabilidad de Abandono (LR)')
+        plt.ylabel('Clientes')
         plt.title(f'Top {cant_top_clientes} Clientes con Mayor Probabilidad de Abandono (LR)')
-        plt.xticks(rotation=90)  # Rotar los apellidos para una mejor visualización
 
         # Mostrar la gráfica utilizando st.pyplot
         st.pyplot(plt)
@@ -348,10 +352,10 @@ def entrenamientoArboles(cant_top_clientes):
         top_clientes_rf = clientes_probables_abandono_rf.head(cant_top_clientes)
 
         # Crear una gráfica de barras para visualizar las probabilidades de abandono de los clientes seleccionados con el modelo RF
-        plt.figure(figsize=(20, 8))
-        plt.bar(top_clientes_rf['Apellido'] + ' - ' + top_clientes_rf['ClienteId'].astype(str), top_clientes_rf['Probabilidad_Abandono_RF'], color='lightcoral')
-        plt.xlabel('Apellidos de los Clientes')
-        plt.ylabel('Probabilidad de Abandono (RF)')
+        plt.figure(figsize=(10, 6))
+        plt.barh(top_clientes_rf['Apellido'] + ' - ' + top_clientes_rf['ClienteId'].astype(str), top_clientes_rf['Probabilidad_Abandono_RF'], color='lightcoral')
+        plt.xlabel('Probabilidad de Abandono (RF)')
+        plt.ylabel('Clientes')
         plt.title(f'Top {cant_top_clientes} Clientes con Mayor Probabilidad de Abandono (RF)')
         plt.xticks(rotation=90)  # Rotar los apellidos para una mejor visualización
 
@@ -415,9 +419,9 @@ def entrenamientoSVM(cant_top_clientes):
 
         # Crear una gráfica de barras para visualizar las probabilidades de abandono de los clientes seleccionados con el modelo SVM
         plt.figure(figsize=(20, 8))
-        plt.bar(top_clientes_svm['Apellido'] + ' - ' + top_clientes_svm['ClienteId'].astype(str), top_clientes_svm['Probabilidad_Abandono_SVM'], color='lightcoral')
-        plt.xlabel('Apellidos de los Clientes')
-        plt.ylabel('Probabilidad de Abandono (SVM)')
+        plt.barh(top_clientes_svm['Apellido'] + ' - ' + top_clientes_svm['ClienteId'].astype(str), top_clientes_svm['Probabilidad_Abandono_SVM'], color='lightcoral')
+        plt.xlabel('Probabilidad de Abandono (SVM)')
+        plt.ylabel('Clientes')
         plt.title(f'Top {cant_top_clientes} Clientes con Mayor Probabilidad de Abandono (SVM)')
         plt.xticks(rotation=90)  # Rotar los apellidos para una mejor visualización
 
@@ -481,11 +485,11 @@ def entrenamientoGradientBoosting(cant_top_clientes):
 
         # Crear una gráfica de barras para visualizar las probabilidades de abandono de los 
         # clientes seleccionados con el modelo Gradient Boosting
-        plt.figure(figsize=(20, 8))
-        plt.bar(top_clientes_gb['Apellido'] + ' - ' + top_clientes_gb['ClienteId'].astype(str), 
+        plt.figure(figsize=(10, 6))
+        plt.barh(top_clientes_gb['Apellido'] + ' - ' + top_clientes_gb['ClienteId'].astype(str), 
                 top_clientes_gb['Probabilidad_Abandono_GB'], color='lightcoral')
-        plt.xlabel('Apellidos de los Clientes')
-        plt.ylabel('Probabilidad de Abandono (GB)')
+        plt.xlabel('Probabilidad de Abandono (GB)')
+        plt.ylabel('Clientes')
         plt.title(f'Top {cant_top_clientes} Clientes con Mayor Probabilidad de Abandono (GB)')
         plt.xticks(rotation=90)  # Rotar los apellidos para una mejor visualización
 
