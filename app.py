@@ -288,13 +288,23 @@ def entrenamientoRegresion(cant_top_clientes):
 
         # Crear una gráfica de barras horizontales para visualizar las probabilidades de abandono de los clientes seleccionados con el modelo LR
         plt.figure(figsize=(10, 6))
-        plt.barh(top_clientes_lr['Apellido'] + ' - ' + top_clientes_lr['ClienteId'].astype(str), top_clientes_lr['Probabilidad_Abandono_LR'], color='lightcoral')
+
+        # Usar la función barh para crear la gráfica
+        bars = plt.barh(top_clientes_lr['Apellido'] + ' - ' + top_clientes_lr['ClienteId'].astype(str),
+                        top_clientes_lr['Probabilidad_Abandono_LR'],
+                        color='lightcoral')
+
+        # Agregar etiquetas a las barras con el porcentaje de probabilidad
+        for bar, probabilidad in zip(bars, top_clientes_lr['Probabilidad_Abandono_LR']):
+            plt.text(bar.get_width() + 0.01, bar.get_y() + bar.get_height() / 2, f'{probabilidad:.2%}', ha='left', va='center')
+
+        # Añadir etiquetas y título
         plt.xlabel('Probabilidad de Abandono (LR)')
         plt.ylabel('Clientes')
         plt.title(f'Top {cant_top_clientes} Clientes con Mayor Probabilidad de Abandono (LR)')
 
-        # Mostrar la gráfica utilizando st.pyplot
-        st.pyplot(plt)
+        # Mostrar la gráfica
+        plt.show()
         
 def entrenamientoArboles(cant_top_clientes):
     X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test = preprocesamiento()
@@ -524,7 +534,7 @@ def main():
             seleccionModelo()
         else:
             st.warning('Carga de Datos Incorrecta')
-    cant_top_clientes = st.slider("Inserta la cantidad top de clientes que deseas ver: ")
+    cant_top_clientes = st.slider("Inserta la cantidad top de clientes que deseas ver: ", min_value=1, max_value=30, value=10, step=1)
     st.write("Elige el modelo de entrenamiento que que deseas utilizar: ")
     if st.button('Regresión Logística'):
         if data is not None:
