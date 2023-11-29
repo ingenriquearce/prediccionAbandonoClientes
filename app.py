@@ -21,7 +21,7 @@ st.title('Software de Predicción del Abandono de Clientes')
 
 def cargar_datos():
     st.header("Cargar los Datos")   
-    st.write('En este orden, con esos nombres y con esos tipos de datos, deben estar las columnas')
+    st.write('Con el siguiente orden y con esos tipos de datos, deben estar las columnas del conjunto de datos a introducir:')
     st.image('dataframeExample.png', use_column_width=True)
     uploaded_file = st.file_uploader("Selecciona un archivo CSV con el conjunto de Datos", type=["csv"])
     if uploaded_file is not None:
@@ -288,23 +288,13 @@ def entrenamientoRegresion(cant_top_clientes):
 
         # Crear una gráfica de barras horizontales para visualizar las probabilidades de abandono de los clientes seleccionados con el modelo LR
         plt.figure(figsize=(10, 6))
-
-        # Usar la función barh para crear la gráfica
-        bars = plt.barh(top_clientes_lr['Apellido'] + ' - ' + top_clientes_lr['ClienteId'].astype(str),
-                        top_clientes_lr['Probabilidad_Abandono_LR'],
-                        color='lightcoral')
-
-        # Agregar etiquetas a las barras con el porcentaje de probabilidad
-        for bar, probabilidad in zip(bars, top_clientes_lr['Probabilidad_Abandono_LR']):
-            plt.text(bar.get_width() + 0.01, bar.get_y() + bar.get_height() / 2, f'{probabilidad:.2%}', ha='left', va='center')
-
-        # Añadir etiquetas y título
+        plt.barh(top_clientes_lr['Apellido'] + ' - ' + top_clientes_lr['ClienteId'].astype(str), top_clientes_lr['Probabilidad_Abandono_LR'], color='lightcoral')
         plt.xlabel('Probabilidad de Abandono (LR)')
         plt.ylabel('Clientes')
         plt.title(f'Top {cant_top_clientes} Clientes con Mayor Probabilidad de Abandono (LR)')
 
-        # Mostrar la gráfica
-        plt.show()
+        # Mostrar la gráfica utilizando st.pyplot
+        st.pyplot(plt)
         
 def entrenamientoArboles(cant_top_clientes):
     X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test = preprocesamiento()
