@@ -191,7 +191,7 @@ def preprocesamiento():
     # Crear un DataFrame con las características preprocesadas y los nombres de las columnas
     X_train_preprocessed_df = pd.DataFrame(X_train_preprocessed, columns=feature_names)
 
-    st.write("¡Preprocesamiento de Datos Exitoso!")
+    st.success("¡Preprocesamiento de Datos Exitoso!")
 
     return X_train_preprocessed, X_test_preprocessed, X_train, X_test, y_train, y_test
 
@@ -262,8 +262,10 @@ def entrenamientoRegresion(cant_top_clientes):
     confusion_mat = confusion_matrix(y_test, y_pred)
 
     # Mostrar las métricas en la interfaz
-    st.subheader("Reporte de Clasificación:")
+    st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
+    st.markdown("### Reporte de Clasificación:")
     st.text(classification_rep)
+    st.markdown("### Matriz de Confusión:")
 
     # Graficar Matriz de Confusión
     plt.figure(figsize=(8, 6))
@@ -277,7 +279,7 @@ def entrenamientoRegresion(cant_top_clientes):
     cv_scores = cross_val_score(logistic_model, X_train_preprocessed, y_train, cv=5)  # cv=5 para 5 pliegues
 
     # Mostrar los resultados
-    st.write(f'Precisión promedio en validación cruzada: {cv_scores.mean():.2f}')
+    st.success(f'Precisión promedio en validación cruzada: {cv_scores.mean():.2f}')
 
     # Validar que la cantidad ingresada sea válida
     if cant_top_clientes <= 0:
@@ -327,6 +329,7 @@ def entrenamientoArboles(cant_top_clientes):
     confusion_mat = confusion_matrix(y_test, y_pred)
 
     # Mostrar las métricas en la interfaz
+    st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
     st.subheader("Reporte de Clasificación:")
     st.text(classification_rep)
 
@@ -342,7 +345,7 @@ def entrenamientoArboles(cant_top_clientes):
     cv_scores = cross_val_score(rf_model, X_train_preprocessed, y_train, cv=5)  # cv=5 para 5 pliegues
 
     # Mostrar los resultados
-    st.write(f'Precisión promedio en validación cruzada: {cv_scores.mean():.2f}')
+    st.success(f'Precisión promedio en validación cruzada: {cv_scores.mean():.2f}')
 
     # Validar que la cantidad ingresada sea válida
     if cant_top_clientes <= 0:
@@ -393,6 +396,7 @@ def entrenamientoSVM(cant_top_clientes):
     confusion_mat = confusion_matrix(y_test, y_pred)
 
     # Mostrar las métricas en la interfaz
+    st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
     st.subheader("Reporte de Clasificación:")
     st.text(classification_rep)
 
@@ -459,6 +463,7 @@ def entrenamientoGradientBoosting(cant_top_clientes):
     confusion_mat = confusion_matrix(y_test, y_pred)
 
     # Mostrar las métricas en la interfaz
+    st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
     st.subheader("Reporte de Clasificación:")
     st.text(classification_rep)
 
@@ -531,7 +536,7 @@ def main():
             entrenamientoRegresion(cant_top_clientes)
         else:
             st.warning('Carga de Datos Incorrecta')    
-    if st.button('Arboles de Decision'):
+    if st.button('Bosques Aleatorios'):
         if data is not None:
             entrenamientoArboles(cant_top_clientes)
         else:
