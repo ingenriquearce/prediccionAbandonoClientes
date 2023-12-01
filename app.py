@@ -330,8 +330,9 @@ def entrenamientoArboles(cant_top_clientes):
 
     # Mostrar las métricas en la interfaz
     st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
-    st.subheader("Reporte de Clasificación:")
+    st.markdown("### Reporte de Clasificación:")
     st.text(classification_rep)
+    st.markdown("### Matriz de Confusión:")
 
     # Graficar Matriz de Confusión
     plt.figure(figsize=(8, 6))
@@ -397,8 +398,9 @@ def entrenamientoSVM(cant_top_clientes):
 
     # Mostrar las métricas en la interfaz
     st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
-    st.subheader("Reporte de Clasificación:")
+    st.markdown("### Reporte de Clasificación:")
     st.text(classification_rep)
+    st.markdown("### Matriz de Confusión:")
 
     # Graficar Matriz de Confusión
     plt.figure(figsize=(8, 6))
@@ -464,8 +466,9 @@ def entrenamientoGradientBoosting(cant_top_clientes):
 
     # Mostrar las métricas en la interfaz
     st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
-    st.subheader("Reporte de Clasificación:")
+    st.markdown("### Reporte de Clasificación:")
     st.text(classification_rep)
+    st.markdown("### Matriz de Confusión:")
 
     # Graficar Matriz de Confusión
     plt.figure(figsize=(8, 6))
