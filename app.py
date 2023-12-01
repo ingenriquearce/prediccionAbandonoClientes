@@ -34,6 +34,7 @@ def cargar_datos():
             # Verificar si la cantidad de nombres arbitrarios coincide con la cantidad de columnas en el DataFrame
             if len(nombres_arbitrarios) == len(data.columns):
                 data.columns = nombres_arbitrarios
+                st.success("¡Carga de Datos Exitosa!")
                 return data # Retorna el dataframe
             else:
                 st.warning('El conjunto de datos no cumple con los requisitos del software')
@@ -68,7 +69,7 @@ def limpieza():
     plt.title('Cantidad de Filas Después de Eliminar Duplicados')
 
     plt.tight_layout()
-    st.write("¡Datos Limpios!")
+    st.success("¡Datos Limpios!")
 
     if filas_eliminadas > 0:
         # Mostrar los gráficos
@@ -245,7 +246,7 @@ def entrenamientoRegresion(cant_top_clientes):
     accuracy_logistic = accuracy_score(y_test, y_pred) * 100
     
     # Mostrar la precisión en la interfaz
-    st.write(f'Precisión del modelo en el conjunto de prueba: {accuracy_logistic:.2f}%')
+    st.success(f'Precisión del modelo en el conjunto de prueba: {accuracy_logistic:.2f}%')
 
     # Obtener las probabilidades de abandono para cada cliente
     y_probs = logistic_model.predict_proba(X_test_preprocessed)[:, 1]
@@ -262,7 +263,7 @@ def entrenamientoRegresion(cant_top_clientes):
     confusion_mat = confusion_matrix(y_test, y_pred)
 
     # Mostrar las métricas en la interfaz
-    st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
+    st.write("El siguiente reporte y la matriz a continuación, son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, si usted no comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados.")
     st.markdown("### Reporte de Clasificación:")
     st.text(classification_rep)
     st.markdown("### Matriz de Confusión:")
@@ -312,7 +313,7 @@ def entrenamientoArboles(cant_top_clientes):
     accuracy_rf = accuracy_score(y_test, y_pred)
     
     # Mostrar la precisión en la interfaz
-    st.write(f'Precisión del modelo en el conjunto de prueba: {accuracy_rf:.2f}')
+    st.success(f'Precisión del modelo en el conjunto de prueba: {accuracy_rf:.2f}')
 
     # Obtener las probabilidades de abandono para cada cliente utilizando el modelo de Bosques Aleatorios
     y_probs_rf = rf_model.predict_proba(X_test_preprocessed)[:, 1]
@@ -329,7 +330,7 @@ def entrenamientoArboles(cant_top_clientes):
     confusion_mat = confusion_matrix(y_test, y_pred)
 
     # Mostrar las métricas en la interfaz
-    st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
+    st.write("El siguiente reporte y la matriz a continuación, son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, si usted no comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados.")
     st.markdown("### Reporte de Clasificación:")
     st.text(classification_rep)
     st.markdown("### Matriz de Confusión:")
@@ -380,7 +381,7 @@ def entrenamientoSVM(cant_top_clientes):
     accuracy_svm = accuracy_score(y_test, y_pred) * 100
 
     # Mostrar la precisión en la interfaz
-    st.write(f'Precisión del modelo SVM en el conjunto de prueba: {accuracy_svm:.2f}%')
+    st.succeess(f'Precisión del modelo SVM en el conjunto de prueba: {accuracy_svm:.2f}%')
 
     # Obtener las probabilidades de abandono para cada cliente
     y_probs_svm = svm_model.predict_proba(X_test_preprocessed)[:, 1]
@@ -397,7 +398,7 @@ def entrenamientoSVM(cant_top_clientes):
     confusion_mat = confusion_matrix(y_test, y_pred)
 
     # Mostrar las métricas en la interfaz
-    st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
+    st.write("El siguiente reporte y la matriz a continuación, son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, si usted no comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados.")
     st.markdown("### Reporte de Clasificación:")
     st.text(classification_rep)
     st.markdown("### Matriz de Confusión:")
@@ -448,7 +449,7 @@ def entrenamientoGradientBoosting(cant_top_clientes):
     accuracy_gb = accuracy_score(y_test, y_pred) * 100
 
     # Mostrar la precisión en la interfaz
-    st.write(f'Precisión del modelo Gradient Boosting en el conjunto de prueba: {accuracy_gb:.2f}%')
+    st.success(f'Precisión del modelo Gradient Boosting en el conjunto de prueba: {accuracy_gb:.2f}%')
 
     # Obtener las probabilidades de abandono para cada cliente
     y_probs_gb = gb_model.predict_proba(X_test_preprocessed)[:, 1]
@@ -465,7 +466,7 @@ def entrenamientoGradientBoosting(cant_top_clientes):
     confusion_mat = confusion_matrix(y_test, y_pred)
 
     # Mostrar las métricas en la interfaz
-    st.write("El siguiente reporte y la matriz a continuación son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, sino comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados")
+    st.write("El siguiente reporte y la matriz a continuación, son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, si usted no comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados.")
     st.markdown("### Reporte de Clasificación:")
     st.text(classification_rep)
     st.markdown("### Matriz de Confusión:")
