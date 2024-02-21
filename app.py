@@ -381,7 +381,7 @@ def entrenamientoSVM(cant_top_clientes):
     accuracy_svm = accuracy_score(y_test, y_pred) * 100
 
     # Mostrar la precisión en la interfaz
-    st.succeess(f'Precisión del modelo SVM en el conjunto de prueba: {accuracy_svm:.2f}%')
+    st.success(f'Precisión del modelo SVM en el conjunto de prueba: {accuracy_svm:.2f}%')
 
     # Obtener las probabilidades de abandono para cada cliente
     y_probs_svm = svm_model.predict_proba(X_test_preprocessed)[:, 1]
