@@ -425,7 +425,7 @@ def entrenamientoSVM(cant_top_clientes):
         top_clientes_svm = clientes_probables_abandono_svm.head(cant_top_clientes)
 
         # Crear una gráfica de barras para visualizar las probabilidades de abandono de los clientes seleccionados con el modelo SVM
-        plt.figure(figsize=(20, 8))
+        plt.figure(figsize=(10, 8))
         plt.barh(top_clientes_svm['Apellido'] + ' - ' + top_clientes_svm['ClienteId'].astype(str), top_clientes_svm['Probabilidad_Abandono_SVM'], color='lightcoral')
         plt.xlabel('Probabilidad de Abandono (SVM)')
         plt.ylabel('Clientes')
