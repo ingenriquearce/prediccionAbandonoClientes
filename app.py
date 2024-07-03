@@ -269,12 +269,9 @@ def entrenamientoRegresion(cant_top_clientes):
     st.markdown("### Matriz de Confusión:")
 
     # Graficar Matriz de Confusión
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(confusion_mat, annot=True, fmt='d', cmap='Blues', cbar=False)
-    plt.xlabel('Etiquetas Predichas')
-    plt.ylabel('Etiquetas Reales')
-    plt.title('Matriz de Confusión')
-    st.pyplot(plt)
+    st.write(f"   {confusion_mat[0][0]}              {confusion_mat[0][1]}")
+    st.write(f"   {confusion_mat[1][0]}              {confusion_mat[1][1]}")
+
 
     # Realizar validación cruzada
     cv_scores = cross_val_score(logistic_model, X_train_preprocessed, y_train, cv=5)  # cv=5 para 5 pliegues
@@ -336,13 +333,9 @@ def entrenamientoArboles(cant_top_clientes):
     st.markdown("### Matriz de Confusión:")
 
     # Graficar Matriz de Confusión
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(confusion_mat, annot=True, fmt='d', cmap='Blues', cbar=False)
-    plt.xlabel('Etiquetas Predichas')
-    plt.ylabel('Etiquetas Reales')
-    plt.title('Matriz de Confusión')
-    st.pyplot(plt)
-    
+    st.write(f"   {confusion_mat[0][0]}              {confusion_mat[0][1]}")
+    st.write(f"   {confusion_mat[1][0]}              {confusion_mat[1][1]}")
+
     # Realizar validación cruzada
     cv_scores = cross_val_score(rf_model, X_train_preprocessed, y_train, cv=5)  # cv=5 para 5 pliegues
 
@@ -401,15 +394,11 @@ def entrenamientoSVM(cant_top_clientes):
     st.write("El siguiente reporte y la matriz a continuación, son métricas de evaluación del rendimiento del modelo e indican la precisión de los resultados obtenidos, si usted no comprende la lectura de estas métricas, puede seguir deslizando directamente hasta la gráfica de resultados.")
     st.markdown("### Reporte de Clasificación:")
     st.text(classification_rep)
-    st.markdown("### Matriz de Confusión:")
 
     # Graficar Matriz de Confusión
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(confusion_mat, annot=True, fmt='d', cmap='Blues', cbar=False)
-    plt.xlabel('Etiquetas Predichas')
-    plt.ylabel('Etiquetas Reales')
-    plt.title('Matriz de Confusión')
-    st.pyplot(plt)
+    st.markdown("### Matriz de Confusión:")
+    st.write(f"   {confusion_mat[0][0]}              {confusion_mat[0][1]}")
+    st.write(f"   {confusion_mat[1][0]}              {confusion_mat[1][1]}")
 
     # Realizar validación cruzada
     cv_scores = cross_val_score(svm_model, X_train_preprocessed, y_train, cv=5)  # cv=5 para 5 pliegues
@@ -472,12 +461,9 @@ def entrenamientoGradientBoosting(cant_top_clientes):
     st.markdown("### Matriz de Confusión:")
 
     # Graficar Matriz de Confusión
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(confusion_mat, annot=True, fmt='d', cmap='Blues', cbar=False)
-    plt.xlabel('Etiquetas Predichas')
-    plt.ylabel('Etiquetas Reales')
-    plt.title('Matriz de Confusión')
-    st.pyplot(plt)
+    st.markdown("### Matriz de Confusión:")
+    st.write(f"   {confusion_mat[0][0]}              {confusion_mat[0][1]}")
+    st.write(f"   {confusion_mat[1][0]}              {confusion_mat[1][1]}")
 
     # Realizar validación cruzada
     cv_scores = cross_val_score(gb_model, X_train_preprocessed, y_train, cv=5)  # cv=5 para 5 pliegues
