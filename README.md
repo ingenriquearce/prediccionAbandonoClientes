@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Predicción de Abandono de Clientes - Versión Refactorizada Simple
 
 Esta versión mantiene la idea original del proyecto, pero con una arquitectura mucho más simple y legible.
@@ -84,3 +85,7 @@ Si presionas **Guardar modelo entrenado**, se crean archivos `.joblib` dentro de
 - `modelo_churn_preprocesador.joblib` → preprocesador ajustado
 
 Eso permite reutilizar el entrenamiento después.
+=======
+# Prediccion del Abandono de Clientes
+Predice el abandono de clientes en una entidad bancaria
+>>>>>>> 244894ecaf43f72db7e392e7a115811848a3edc6
