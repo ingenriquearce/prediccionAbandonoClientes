@@ -1,0 +1,2 @@
+run_id,fecha,modelo,accuracy,precision_churn,recall_churn,f1_churn,roc_auc,cross_val_mean,promovido
+exp_20260408_140334_regresion_logistica,2026-04-08T14:03:34,Regresión Logística,0.808,0.5891472868217055,0.18673218673218672,0.2835820895522388,0.7747778595236222,0.31690726646671036,True

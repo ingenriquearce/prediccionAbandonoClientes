@@ -9,7 +9,7 @@ from src.analisis import (
     obtener_columnas_categoricas,
 )
 from src.datos import cargar_csv_subido, cargar_dataset_base, limpiar_datos
-from src.modelos import comparar_modelos, ejecutar_experimento
+from src.modelos import comparar_modelos, ejecutar_experimento, entrenar_modelo, guardar_modelo
 from src.registro_modelos import cargar_champion_actual, obtener_historial_experimentos
 
 st.set_page_config(page_title='Predicción de Abandono', layout='wide')
@@ -25,7 +25,7 @@ def cargar_datos_desde_interfaz():
     )
 
     st.write('El archivo debe tener la misma estructura del dataset original.')
-    st.image('assets/dataframeExample.png', use_container_width=True)
+    st.image('assets/dataframeExample.png', use_column_width=True)
 
     if opcion == 'Usar dataset de ejemplo':
         df = cargar_dataset_base()

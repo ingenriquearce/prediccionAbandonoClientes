@@ -1,0 +1,18 @@
+{
+  "modelo": "LogisticRegression",
+  "nombre_modelo_interfaz": "Regresión Logística",
+  "columnas_numericas": [
+    "PuntuacionCredito",
+    "Edad",
+    "Tenencia",
+    "Saldo",
+    "NroProductos",
+    "TieneTarjetaCredito",
+    "EsMiembroActivo",
+    "SalarioEstimado"
+  ],
+  "columnas_categoricas": [
+    "Geografia",
+    "Genero"
+  ]
+}

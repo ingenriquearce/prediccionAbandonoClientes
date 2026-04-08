@@ -187,6 +187,54 @@ def ejecutar_experimento(df, nombre_modelo):
     }
 
 
-def guardar_modelo(pipeline, nombre_archivo='modelo_churn'):
+def guardar_modelo(modelo_o_pipeline, preprocesador=None, nombre_archivo='modelo_churn'):
+    """
+    Guarda un pipeline completo.
+    - Si recibe un pipeline, lo guarda directamente.
+    - Si recibe modelo + preprocesador (flujo viejo), arma el pipeline y lo guarda.
+    """
     CARPETA_MODELOS.mkdir(exist_ok=True)
+
+    if preprocesador is None:
+        pipeline = modelo_o_pipeline
+    else:
+        pipeline = Pipeline([
+            ('preprocesador', preprocesador),
+            ('modelo', modelo_o_pipeline),
+        ])
+
     joblib.dump(pipeline, CARPETA_MODELOS / f'{nombre_archivo}.joblib')
+
+
+
+def entrenar_modelo(df, nombre_modelo):
+    """
+    Wrapper de compatibilidad con la versión anterior del proyecto.
+    Permite que un app.py viejo siga funcionando mientras internamente
+    usamos el pipeline nuevo.
+    """
+    X_train, X_test, y_train, y_test, _, info_test = preparar_datos(df)
+    pipeline = crear_pipeline(nombre_modelo)
+
+    pipeline.fit(X_train, y_train)
+    predicciones = pipeline.predict(X_test)
+    probabilidades = pipeline.predict_proba(X_test)[:, 1]
+
+    metricas = calcular_metricas(y_test, predicciones, probabilidades, pipeline, X_train, y_train)
+    matriz = confusion_matrix(y_test, predicciones)
+    reporte_texto = classification_report(y_test, predicciones, zero_division=0)
+
+    resultados_clientes = info_test.copy()
+    resultados_clientes['ProbabilidadAbandono'] = probabilidades
+    resultados_clientes = resultados_clientes.sort_values(by='ProbabilidadAbandono', ascending=False)
+
+    return {
+        'modelo': pipeline.named_steps['modelo'],
+        'preprocesador': pipeline.named_steps['preprocesador'],
+        'pipeline': pipeline,
+        'accuracy': metricas['accuracy'] * 100,
+        'classification_report': reporte_texto,
+        'confusion_matrix': matriz,
+        'cross_val_mean': metricas['cross_val_mean'],
+        'top_clientes': resultados_clientes,
+    }

@@ -1,0 +1,19 @@
+{
+  "dataset": "dataset_cargado_en_streamlit",
+  "n_filas": 10000,
+  "n_columnas": 14,
+  "fecha_entrenamiento": "2026-04-08T14:03:34",
+  "columna_objetivo": "Churn",
+  "columnas_modelo": [
+    "PuntuacionCredito",
+    "Edad",
+    "Tenencia",
+    "Saldo",
+    "NroProductos",
+    "TieneTarjetaCredito",
+    "EsMiembroActivo",
+    "SalarioEstimado",
+    "Geografia",
+    "Genero"
+  ]
+}

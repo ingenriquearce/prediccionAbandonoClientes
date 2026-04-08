@@ -1,0 +1,14 @@
+{
+  "run_id": "exp_20260408_140334_regresion_logistica",
+  "modelo": "Regresión Logística",
+  "metrica_principal": "f1_churn",
+  "valor_metrica": 0.2835820895522388,
+  "ruta_pipeline": "mlops\\experimentos\\exp_20260408_140334_regresion_logistica\\pipeline.joblib",
+  "accuracy": 0.808,
+  "precision_churn": 0.5891472868217055,
+  "recall_churn": 0.18673218673218672,
+  "f1_churn": 0.2835820895522388,
+  "roc_auc": 0.7747778595236222,
+  "cross_val_mean": 0.31690726646671036,
+  "fecha_entrenamiento": "2026-04-08T14:03:34"
+}
