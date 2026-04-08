@@ -1,15 +1,16 @@
-import streamlit as st
 import pandas as pd
-from src.datos import cargar_csv_subido, cargar_dataset_base, limpiar_datos
+import streamlit as st
 from src.analisis import (
-    obtener_columnas_categoricas,
     grafico_edad,
-    grafico_saldo,
-    grafico_geografia,
     grafico_genero,
+    grafico_geografia,
+    grafico_saldo,
     matriz_correlacion,
+    obtener_columnas_categoricas,
 )
-from src.modelos import comparar_modelos, entrenar_modelo, guardar_modelo
+from src.datos import cargar_csv_subido, cargar_dataset_base, limpiar_datos
+from src.modelos import comparar_modelos, ejecutar_experimento
+from src.registro_modelos import cargar_champion_actual, obtener_historial_experimentos
 
 st.set_page_config(page_title='Predicción de Abandono', layout='wide')
 st.title('Software de Predicción del Abandono de Clientes')
@@ -24,7 +25,7 @@ def cargar_datos_desde_interfaz():
     )
 
     st.write('El archivo debe tener la misma estructura del dataset original.')
-    st.image('assets/dataframeExample.png', use_column_width=True)
+    st.image('assets/dataframeExample.png', use_container_width=True)
 
     if opcion == 'Usar dataset de ejemplo':
         df = cargar_dataset_base()
@@ -71,27 +72,59 @@ def mostrar_analisis_exploratorio(df):
     return df_limpio
 
 
+def mostrar_champion_actual():
+    st.header('3. Modelo champion actual')
+    champion = cargar_champion_actual()
+
+    if champion is None:
+        st.info('Aún no existe un modelo champion. Ejecuta un experimento para crear el primero.')
+        return
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric('Modelo', champion['modelo'])
+    col2.metric('F1 churn', f"{champion['f1_churn']:.4f}")
+    col3.metric('Recall churn', f"{champion['recall_churn']:.4f}")
+
+    st.write(f"Run ID: `{champion['run_id']}`")
+    st.write(f"Ruta del pipeline productivo: `{champion['ruta_pipeline']}`")
+    st.write(f"Entrenado el: {champion['fecha_entrenamiento']}")
+
+
 def mostrar_comparacion_modelos(df):
-    st.header('3. Comparación de modelos')
+    st.header('4. Comparación rápida de modelos')
     if st.button('Comparar modelos'):
         resultados = comparar_modelos(df)
         st.dataframe(resultados, use_container_width=True)
-        st.bar_chart(resultados.set_index('Modelo'))
+        st.bar_chart(resultados.set_index('Modelo')['F1 churn'])
 
 
 def mostrar_entrenamiento(df):
-    st.header('4. Entrenar un modelo y ver clientes con mayor riesgo')
+    st.header('5. Ejecutar experimento y evaluar promoción')
     nombre_modelo = st.selectbox(
         'Elige un modelo',
         ['Regresión Logística', 'Bosques Aleatorios', 'SVM', 'Gradient Boosting']
     )
     top_n = st.slider('Cantidad de clientes a mostrar', min_value=1, max_value=30, value=10)
 
-    if st.button('Entrenar modelo seleccionado'):
-        resultados = entrenar_modelo(df, nombre_modelo)
+    if st.button('Ejecutar experimento'):
+        resultados = ejecutar_experimento(df, nombre_modelo)
+        metricas = resultados['metricas']
+        decision = resultados['decision_promocion']
 
-        st.success(f"Precisión del modelo: {resultados['accuracy']:.2f}%")
-        st.write(f"Precisión promedio en validación cruzada: {resultados['cross_val_mean']:.2f}")
+        st.write(f"Run ID generado: `{resultados['run_id']}`")
+
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric('Accuracy', f"{metricas['accuracy']:.4f}")
+        col2.metric('F1 churn', f"{metricas['f1_churn']:.4f}")
+        col3.metric('Recall churn', f"{metricas['recall_churn']:.4f}")
+        col4.metric('ROC AUC', f"{metricas['roc_auc']:.4f}")
+
+        st.write(f"Validación cruzada promedio (F1): {metricas['cross_val_mean']:.4f}")
+
+        if decision['fue_promovido']:
+            st.success(f"Modelo promovido a champion. {decision['motivo']}")
+        else:
+            st.warning(f"Modelo registrado, pero no promovido. {decision['motivo']}")
 
         st.subheader('Reporte de clasificación')
         st.text(resultados['classification_report'])
@@ -105,13 +138,23 @@ def mostrar_entrenamiento(df):
         st.dataframe(top_clientes, use_container_width=True)
         st.bar_chart(top_clientes.set_index('ClienteId')['ProbabilidadAbandono'])
 
-        if st.button('Guardar modelo entrenado'):
-            guardar_modelo(resultados['modelo'], resultados['preprocesador'])
-            st.success('Modelo y preprocesador guardados en la carpeta modelos_guardados.')
+        st.subheader('Artefactos generados')
+        st.json(resultados['artefactos'])
+
+
+def mostrar_historial_experimentos():
+    st.header('6. Historial reciente de experimentos')
+    historial = obtener_historial_experimentos(limit=10)
+
+    if historial.empty:
+        st.info('Todavía no hay experimentos registrados.')
+        return
+
+    st.dataframe(historial, use_container_width=True)
 
 
 def mostrar_busqueda_cliente(df):
-    st.header('5. Búsqueda de cliente por ID')
+    st.header('7. Búsqueda de cliente por ID')
     cliente_id = st.text_input('Introduce el ID del cliente')
 
     if st.button('Buscar cliente'):
@@ -142,8 +185,10 @@ def main():
     st.dataframe(df.head(), use_container_width=True)
 
     df_limpio = mostrar_analisis_exploratorio(df)
+    mostrar_champion_actual()
     mostrar_comparacion_modelos(df_limpio)
     mostrar_entrenamiento(df_limpio)
+    mostrar_historial_experimentos()
     mostrar_busqueda_cliente(df_limpio)
 
 

@@ -1,69 +1,82 @@
-<<<<<<< HEAD
-# Predicción de Abandono de Clientes - Versión Refactorizada Simple
+# Predicción de Abandono de Clientes
 
-Esta versión mantiene la idea original del proyecto, pero con una arquitectura mucho más simple y legible.
+Proyecto simple y legible de machine learning con Streamlit para predecir clientes con mayor probabilidad de abandono.
 
-## Objetivo
-Predecir qué clientes tienen mayor probabilidad de abandonar el banco y mostrar los casos de mayor riesgo en una app hecha con Streamlit.
+## Qué hace ahora
+Además del análisis y entrenamiento, esta versión ya incluye una capa básica de MLOps local:
+
+- comparación rápida de modelos,
+- ejecución de experimentos,
+- guardado de artefactos por corrida,
+- registro de métricas,
+- historial de experimentos,
+- promoción automática de un **modelo champion** si supera al anterior.
 
 ## Estructura del proyecto
 
 ```text
-PrediccionAbandonoClientes_refactor_simple/
-├── app.py                # Interfaz Streamlit
+PrediccionAbandonoClientes/
+├── app.py
 ├── src/
-│   ├── datos.py          # Carga, renombrado y limpieza
-│   ├── analisis.py       # Gráficos del análisis exploratorio
-│   └── modelos.py        # Preprocesamiento, entrenamiento y evaluación
+│   ├── datos.py
+│   ├── analisis.py
+│   ├── modelos.py
+│   ├── experimentos.py
+│   └── registro_modelos.py
 ├── data/
-│   └── Churn_Data.csv    # Dataset base
+│   └── Churn_Data.csv
 ├── assets/
 │   └── dataframeExample.png
 ├── notebooks/
 │   └── PrediccionAbandonoDeClientes.ipynb
-└── modelos_guardados/    # Aquí se guardan modelo y preprocesador
+├── mlops/
+│   ├── experimentos/
+│   └── registry/
+└── requirements.txt
 ```
 
-## Qué hace cada archivo
+## Flujo de trabajo
 
-### `app.py`
-Solo controla la app:
-- carga datos,
-- muestra análisis exploratorio,
-- compara modelos,
-- entrena un modelo,
-- muestra clientes con mayor riesgo,
-- permite buscar un cliente.
+1. Cargas el dataset base o subes tu CSV.
+2. La app limpia duplicados y muestra análisis exploratorio.
+3. Puedes comparar varios modelos rápidamente.
+4. Ejecutas un experimento con el modelo que elijas.
+5. La app guarda:
+   - `pipeline.joblib`
+   - `metricas.json`
+   - `parametros.json`
+   - `metadata.json`
+6. El nuevo experimento se compara contra el **champion** actual usando `f1_churn`.
+7. Si gana, se promueve automáticamente como nuevo modelo productivo.
 
-### `src/datos.py`
-Tiene lo básico para trabajar con el dataset:
-- cargar el CSV base,
-- cargar un CSV subido,
-- renombrar columnas a español,
-- eliminar duplicados.
+## Criterio de promoción
+La métrica principal del registro es:
 
-### `src/analisis.py`
-Contiene los gráficos del análisis exploratorio:
-- edad,
-- saldo,
-- geografía,
-- género,
-- matriz de correlación.
+- `f1_churn`
 
-### `src/modelos.py`
-Aquí está la parte importante de machine learning:
-- separar X e y,
-- train/test split,
-- escalado y one-hot encoding,
-- entrenamiento de modelos,
-- evaluación,
-- ranking de clientes por probabilidad de abandono,
-- guardado del modelo entrenado.
+Eso evita depender solo de accuracy, que puede engañar en problemas de churn.
 
-## Mejora importante frente al proyecto original
-En esta versión **no se usan `ClienteId`, `Apellido` ni `NroFila` para entrenar**.
+## Qué se guarda en `mlops/`
 
-Eso es importante porque esas columnas son identificadores, no variables de negocio útiles para que el modelo aprenda patrones reales.
+### `mlops/experimentos/`
+Cada ejecución crea una carpeta propia con sus artefactos.
+
+### `mlops/registry/champion.json`
+Guarda el modelo vigente que ganó la comparación.
+
+### `mlops/registry/historial_modelos.csv`
+Guarda el historial de experimentos registrados.
+
+## Modelos incluidos
+- Regresión Logística
+- Bosques Aleatorios
+- SVM
+- Gradient Boosting
+
+## Detalle técnico importante
+El proyecto no usa `ClienteId`, `Apellido` ni `NroFila` para entrenar.
+
+Eso es intencional: son identificadores, no variables de negocio útiles para aprender patrones reales de abandono.
 
 ## Cómo ejecutar
 
@@ -72,20 +85,11 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Modelos incluidos
-- Regresión Logística
-- Bosques Aleatorios
-- SVM
-- Gradient Boosting
+## Nota sobre el guardado del modelo
+Ahora se guarda un único archivo `pipeline.joblib` por experimento.
 
-## Dónde se guarda el entrenamiento
-Si presionas **Guardar modelo entrenado**, se crean archivos `.joblib` dentro de `modelos_guardados/`.
+Ese pipeline incluye:
+- el preprocesamiento,
+- y el modelo entrenado.
 
-- `modelo_churn.joblib` → modelo entrenado
-- `modelo_churn_preprocesador.joblib` → preprocesador ajustado
-
-Eso permite reutilizar el entrenamiento después.
-=======
-# Prediccion del Abandono de Clientes
-Predice el abandono de clientes en una entidad bancaria
->>>>>>> 244894ecaf43f72db7e392e7a115811848a3edc6
+Eso simplifica mucho la reutilización y reduce errores al predecir.
